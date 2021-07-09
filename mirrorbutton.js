@@ -3,11 +3,13 @@ class MirrorButton {
 	 * Handles the click or contextmenu events for token mirror buttons
 	 * 
 	 * @param {Event} event - The triggering event.
-	 * @param {Token} tokenData - The file path of the image to display.
 	 */
-	static async buttonEventHandler(event, tokenData) {
-        let token = canvas.tokens.get(tokenData._id);
-        await token.update({"mirrorX": !token.data.mirrorX});
+	static async buttonEventHandler(event) {
+		// Process each controlled token, as well as the reference token
+        for(let t of canvas.tokens.controlled)
+        {   
+        	await t.document.update({"mirrorX": !t.data.mirrorX});
+		}
     }
     
 	/**
@@ -31,17 +33,16 @@ class MirrorButton {
 	 *
 	 * @param {TokenHUD} hud - The HUD object, not used.
 	 * @param {jQuery} html - The jQuery reference to the HUD HTML.
-	 * @param {Token} token - The data for the Token.
 	 */
-	static prepTokenHUD(hud, html, token) {
+	static prepTokenHUD(hud, html) {
 		const mirrorButton = this.createButton();
 
 		$(mirrorButton)
 			.click((event) =>
-				this.buttonEventHandler(event, token)
+				this.buttonEventHandler(event)
 			)
 			.contextmenu((event) =>
-				this.buttonEventHandler(event, token)
+				this.buttonEventHandler(event)
 			);
 
 		html.find("div.left").append(mirrorButton);
