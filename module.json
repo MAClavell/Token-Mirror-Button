@@ -3,9 +3,9 @@
 	"title": "Token Mirror Button",
 	"description": "This module adds a button to the token HUD that mirrors the token's image horizontally.",
 	"author": "MAClavell",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"minimumCoreVersion": "0.8.8",
-	"compatibleCoreVersion": "0.8.8",
+	"compatibleCoreVersion": "9",
 	"scripts": [
 		"mirrorbutton.js"
 	],
@@ -18,5 +18,7 @@
 	],
 	"manifest": "https://raw.githubusercontent.com/maclavell/token-mirror-button/master/module.json",
 	"url": "https://github.com/MAClavell/Token-Mirror-Button/",
-	"download": "https://github.com/MAClavell/Token-Mirror-Button/releases/download/1.1/Token-Mirror-Button-v1.1.zip"
+	"download": "https://github.com/MAClavell/Token-Mirror-Button/releases/download/1.2/Token-Mirror-Button-v1.2.zip",
+	"bugs": "https://github.com/MAClavell/Token-Mirror-Button/issues",
+	"readme": "https://raw.githubusercontent.com/MAClavell/Token-Mirror-Button/main/README.md"
 }
