@@ -1,3 +1,5 @@
 {
-	"TKNMRB.TooltipText": "Click to mirror the token image horizontally."
+	"TKNMRB.TooltipText": "Click to mirror the token image horizontally.",
+	"TKNMRB.SettingAnimateDuration": "Animation Duration",
+	"TKNMRB.SettingAnimateDurationHint": "The duration of the mirror animation. Set to 0 to disable the animation."
 }

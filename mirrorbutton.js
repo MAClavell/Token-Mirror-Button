@@ -1,3 +1,32 @@
+// Global
+let animationDuration = 0;
+
+// Initialize module
+Hooks.once('ready', function () {
+    const MODULE_NAME = "Token Mirror Button";
+    const MODULE_ID = "token-mirror-button";
+    const SETTING_NAME = "animation_speed";
+    console.log(`Initializing "${MODULE_NAME}"`);
+
+    function parseSetting(value) {
+		animationDuration = value;
+    }
+
+    game.settings.register(MODULE_ID, SETTING_NAME, {
+        name: game.i18n.localize("TKNMRB.SettingAnimateSpeed"),
+        hint: game.i18n.localize("TKNMRB.SettingAnimateSpeedHint"),
+        scope: "client",
+        type: Number,
+        default: 100,
+        config: true,
+        onChange: value => {
+            parseSetting(value);
+        }
+    });
+
+    parseSetting(game.settings.get(MODULE_ID, SETTING_NAME));
+});
+
 class MirrorButton {
 	/**
 	 * Handles the click or contextmenu events for token mirror buttons
@@ -7,8 +36,8 @@ class MirrorButton {
 	static async buttonEventHandler(event) {
 		// Process each controlled token, as well as the reference token
         for(let t of canvas.tokens.controlled)
-        {   
-        	await t.document.update({"mirrorX": !t.data.mirrorX});
+        {
+        	await t.document.update({"texture.scaleX": t.document.texture.scaleX * -1}, {animate: animationDuration != 0, animation: {duration: animationDuration}});
 		}
     }
     

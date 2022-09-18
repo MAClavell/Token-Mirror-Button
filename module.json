@@ -1,24 +1,32 @@
 {
-	"name": "token-mirror-button",
-	"title": "Token Mirror Button",
-	"description": "This module adds a button to the token HUD that mirrors the token's image horizontally.",
-	"author": "MAClavell",
-	"version": "1.2.0",
-	"minimumCoreVersion": "0.8.8",
-	"compatibleCoreVersion": "9",
-	"scripts": [
-		"mirrorbutton.js"
-	],
-	"languages": [
-		{
-			"lang": "en",
-			"name": "English",
-			"path": "lang/en.json"
-		}
-	],
-	"manifest": "https://raw.githubusercontent.com/maclavell/token-mirror-button/master/module.json",
-	"url": "https://github.com/MAClavell/Token-Mirror-Button/",
-	"download": "https://github.com/MAClavell/Token-Mirror-Button/releases/download/1.2/Token-Mirror-Button-v1.2.zip",
-	"bugs": "https://github.com/MAClavell/Token-Mirror-Button/issues",
-	"readme": "https://raw.githubusercontent.com/MAClavell/Token-Mirror-Button/master/README.md"
+  "title": "Token Mirror Button",
+  "description": "This module adds a button to the token HUD that mirrors the token's image horizontally.",
+  "version": "1.3.0",
+  "scripts": [
+    "mirrorbutton.js"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json",
+      "flags": {}
+    }
+  ],
+  "manifest": "https://raw.githubusercontent.com/maclavell/token-mirror-button/master/module.json",
+  "url": "https://github.com/MAClavell/Token-Mirror-Button/",
+  "download": "https://github.com/MAClavell/Token-Mirror-Button/releases/download/1.3.0/Token-Mirror-Button-v1.3.0.zip",
+  "bugs": "https://github.com/MAClavell/Token-Mirror-Button/issues",
+  "readme": "https://raw.githubusercontent.com/MAClavell/Token-Mirror-Button/master/README.md",
+  "id": "token-mirror-button",
+  "authors": [
+    {
+      "name": "MAClavell",
+      "flags": {}
+    }
+  ],
+  "compatibility": {
+    "minimum": "10",
+    "verified": "10"
+  }
 }
