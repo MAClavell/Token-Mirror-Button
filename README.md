@@ -1,5 +1,5 @@
 # Token Mirror Button
-A small module for Foundry VTT that lets you mirror/flip token images with a HUD button
+A small module for Foundry VTT that lets you mirror/flip token images with a HUD button. Can also configure the animation speed of the flip.
 
 # Example
 ![Example GIF](./Token-Mirror-Button-Gif.gif)
