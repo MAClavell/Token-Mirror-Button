@@ -11,8 +11,8 @@ Hooks.on("init", function () {
 
 	const FLIP_ACTION = 'flipToken'
 	game.keybindings.register(TKNMRB_MODULE_ID, FLIP_ACTION, {
-		name: "Mirror Token",
-		hint: "Mirror the selected token(s) horizontally",
+		name: game.i18n.localize("TKNMRB.KeybindingMirrorTokenName"),
+		hint: game.i18n.localize("TKNMRB.KeybindingMirrorTokenHint"),
 		editable: [],
 		onDown: event => {
 			MirrorButton.buttonEventHandler(event);
