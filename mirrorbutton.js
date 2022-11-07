@@ -13,10 +13,7 @@ Hooks.on("init", function () {
 	game.keybindings.register(TKNMRB_MODULE_ID, FLIP_ACTION, {
 		name: "Mirror Token",
 		hint: "Mirror the selected token(s) horizontally",
-		editable: [{
-			key: "KeyF",
-			modifiers: [ KeyboardManager.MODIFIER_KEYS.SHIFT ]
-		}],
+		editable: [],
 		onDown: event => {
 			MirrorButton.buttonEventHandler(event);
 			return true;
