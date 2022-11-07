@@ -1,18 +1,39 @@
 // Global
+const TKNMRB_MODULE_ID = "token-mirror-button";
+const TKNMRB_MODULE_NAME = "Token Mirror Button";
+
 let animationDuration = 0;
+
+
+// Register keybinding
+Hooks.on("init", function () {
+    console.log(`Setting keybindings for "${TKNMRB_MODULE_NAME}"`);
+
+	const FLIP_ACTION = 'flipToken'
+	game.keybindings.register(TKNMRB_MODULE_ID, FLIP_ACTION, {
+		name: "Mirror Token",
+		hint: "Mirror the selected token(s) horizontally",
+		editable: [{
+			key: "KeyF",
+			modifiers: [ KeyboardManager.MODIFIER_KEYS.SHIFT ]
+		}],
+		onDown: event => {
+			MirrorButton.buttonEventHandler(event);
+			return true;
+		},
+	});
+});
 
 // Initialize module
 Hooks.once('ready', function () {
-    const MODULE_NAME = "Token Mirror Button";
-    const MODULE_ID = "token-mirror-button";
-    const SETTING_NAME = "animation_speed";
-    console.log(`Initializing "${MODULE_NAME}"`);
+	const SETTING_NAME = "animation_speed";
+    console.log(`Initializing "${TKNMRB_MODULE_NAME}"`);
 
     function parseSetting(value) {
 		animationDuration = value;
     }
 
-    game.settings.register(MODULE_ID, SETTING_NAME, {
+    game.settings.register(TKNMRB_MODULE_ID, SETTING_NAME, {
         name: game.i18n.localize("TKNMRB.SettingAnimateSpeed"),
         hint: game.i18n.localize("TKNMRB.SettingAnimateSpeedHint"),
         scope: "client",
@@ -24,7 +45,7 @@ Hooks.once('ready', function () {
         }
     });
 
-    parseSetting(game.settings.get(MODULE_ID, SETTING_NAME));
+    parseSetting(game.settings.get(TKNMRB_MODULE_ID, SETTING_NAME));
 });
 
 class MirrorButton {
