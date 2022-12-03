@@ -4,7 +4,6 @@ const MODULE_NAME = "Token Mirror Button";
 
 let animationDuration = 0;
 
-
 // Register keybinding
 Hooks.on("init", function () {
     console.log(`Setting keybindings for "${MODULE_NAME}"`);
@@ -31,8 +30,8 @@ Hooks.once('ready', function () {
     }
 
     game.settings.register(MODULE_ID, SETTING_NAME, {
-        name: game.i18n.localize("TKNMRB.SettingAnimateSpeed"),
-        hint: game.i18n.localize("TKNMRB.SettingAnimateSpeedHint"),
+        name: game.i18n.localize("TKNMRB.SettingAnimateDuration"),
+        hint: game.i18n.localize("TKNMRB.SettingAnimateDurationHint"),
         scope: "client",
         type: Number,
         default: 100,
@@ -53,9 +52,11 @@ class MirrorButton {
 	 */
 	static async buttonEventHandler(event) {
 		// Process each controlled token, as well as the reference token
-        for(let t of canvas.tokens.controlled)
-        {
-        	await t.document.update({"texture.scaleX": t.document.texture.scaleX * -1}, {animate: animationDuration != 0, animation: {duration: animationDuration}});
+        for (let t of canvas.tokens.controlled) {
+			let animate = animationDuration != 0;
+			if (!t._animation || !animate) {
+				await t.document.update({"texture.scaleX": t.document.texture.scaleX * -1}, {animate: animate, animation: {duration: animationDuration}});
+			}
 		}
     }
     
