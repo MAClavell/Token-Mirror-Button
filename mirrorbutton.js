@@ -1,10 +1,28 @@
 // Global
+const MODULE_ID = "token-mirror-button";
+const MODULE_NAME = "Token Mirror Button";
+
 let animationDuration = 0;
+
+
+// Register keybinding
+Hooks.on("init", function () {
+    console.log(`Setting keybindings for "${MODULE_NAME}"`);
+
+    const FLIP_ACTION = 'flipToken'
+	game.keybindings.register(MODULE_ID, FLIP_ACTION, {
+		name: game.i18n.localize("TKNMRB.KeybindingMirrorTokenName"),
+		hint: game.i18n.localize("TKNMRB.KeybindingMirrorTokenHint"),
+		editable: [],
+		onDown: event => {
+			MirrorButton.buttonEventHandler(event);
+			return true;
+		},
+	});
+});
 
 // Initialize module
 Hooks.once('ready', function () {
-    const MODULE_NAME = "Token Mirror Button";
-    const MODULE_ID = "token-mirror-button";
     const SETTING_NAME = "animation_speed";
     console.log(`Initializing "${MODULE_NAME}"`);
 
