@@ -1,35 +1,107 @@
+'use strict';
+
 // Global
 const TMB_MODULE_ID = "token-mirror-button";
 const TMB_MODULE_NAME = "Token Mirror Button";
 
-let animationDuration = 0;
+let TMB_animationDuration = 0;
 
-// Register keybinding
+class MirrorButton {
+	/**
+	 * Mirror the token in a direction
+	 */
+	static async mirrorToken(vertical) {
+		let property = vertical ? "texture.scaleY" : "texture.scaleX";
+
+		// Process each controlled token, as well as the reference token
+		for (let t of canvas.tokens.controlled) {
+			// Don't mirror if there is an ongoing animation and the mirror is animated
+			let animate = TMB_animationDuration != 0;
+			if (!t.animationContexts.size || !animate) {
+				let updates = {};
+				updates[property] = foundry.utils.getProperty(t.document, property) * -1;
+				await t.document.update(updates, { animate: animate, animation: { duration: TMB_animationDuration } });
+			}
+		}
+	}
+
+	/**
+	 * Handles the button event for token mirroring
+	 */
+	static async mirrorTokenButtonHandler(event, target) {
+		let veritcal = event.button == 2;
+		await MirrorButton.mirrorToken(veritcal);
+	}
+
+	/**
+	 * Create the HTML elements for the HUD button
+	 * including the Font Awesome icon and tooltop.
+	 * 
+	 * @return {Element} The `<button>` element that is used as the HUD button.
+	 */
+	static createButton() {
+		let button = document.createElement("button");
+		button.setAttribute("type", "button");
+		button.classList.add("control-icon");
+		button.setAttribute("data-action", "TMB_mirror");
+		button.setAttribute("data-tooltip", "TKNMRB.TooltipText");
+		button.innerHTML = `<i class="fab fa-flipboard fa-fw"></i>`;
+		return button;
+    }
+    
+	/**
+	 * Adds the button to the Token HUD,
+	 * and attaches event listeners.
+	 *
+	 * @param {TokenHUD} hud - The HUD object.
+	 * @param {HTMLFormElement} html - The HUD HTML.
+	 */
+	static prepTokenHUD(hud, html) {
+		const mirrorButton = this.createButton();
+		html.querySelector(".left").append(mirrorButton);
+    }
+}
+
 Hooks.on("init", function () {
-    console.log(`Setting keybindings for "${TMB_MODULE_NAME}"`);
+    console.log(`"${TMB_MODULE_NAME}" init`);
 
-    const FLIP_ACTION = 'flipToken'
-	game.keybindings.register(TMB_MODULE_ID, FLIP_ACTION, {
-		name: game.i18n.localize("TKNMRB.KeybindingMirrorTokenName"),
-		hint: game.i18n.localize("TKNMRB.KeybindingMirrorTokenHint"),
+	// Register keybindings
+    const TMB_MIRROR_HORIZONTAL_ACTION = 'mirrorTokenHorizontal';
+	game.keybindings.register(TMB_MODULE_ID, TMB_MIRROR_HORIZONTAL_ACTION, {
+		name: game.i18n.localize("TKNMRB.KeybindingMirrorTokenHorizontalName"),
+		hint: game.i18n.localize("TKNMRB.KeybindingMirrorTokenHorizontalHint"),
 		editable: [],
 		onDown: event => {
-			MirrorButton.buttonEventHandler(event);
+			MirrorButton.mirrorToken(false);
 			return true;
 		},
 	});
+    const TMB_MIRROR_VERTICAL_ACTION = 'mirrorTokenVertical';
+	game.keybindings.register(TMB_MODULE_ID, TMB_MIRROR_VERTICAL_ACTION, {
+		name: game.i18n.localize("TKNMRB.KeybindingMirrorTokenVerticalName"),
+		hint: game.i18n.localize("TKNMRB.KeybindingMirrorTokenVerticalHint"),
+		editable: [],
+		onDown: event => {
+			MirrorButton.mirrorToken(true);
+			return true;
+		},
+	});
+
+	// Inject the callback into the TokenHUD ApplicationV2.
+	// We use both left (0) and right (2) click
+	CONFIG.Token.hudClass.DEFAULT_OPTIONS.actions.TMB_mirror = {handler: MirrorButton.mirrorTokenButtonHandler, buttons: [0, 2]};
 });
 
-// Initialize module
 Hooks.once('ready', function () {
-    const SETTING_NAME = "animation_speed";
-    console.log(`Initializing "${TMB_MODULE_NAME}"`);
+    const TMB_ANIMATE_DURATION_SETTING_NAME = "animation_speed";
+    console.log(`"${TMB_MODULE_NAME}" ready`);
 
     function parseSetting(value) {
-		animationDuration = value;
+		TMB_animationDuration = value;
     }
 
-    game.settings.register(TMB_MODULE_ID, SETTING_NAME, {
+	// Register settings
+    game.settings.register(TMB_MODULE_ID, TMB_ANIMATE_DURATION_SETTING_NAME, {
         name: game.i18n.localize("TKNMRB.SettingAnimateDuration"),
         hint: game.i18n.localize("TKNMRB.SettingAnimateDurationHint"),
         scope: "client",
@@ -41,60 +113,9 @@ Hooks.once('ready', function () {
         }
     });
 
-    parseSetting(game.settings.get(TMB_MODULE_ID, SETTING_NAME));
+    parseSetting(game.settings.get(TMB_MODULE_ID, TMB_ANIMATE_DURATION_SETTING_NAME));
+
 });
 
-class MirrorButton {
-	/**
-	 * Handles the click or contextmenu events for token mirror buttons
-	 * 
-	 * @param {Event} event - The triggering event.
-	 */
-	static async buttonEventHandler(event) {
-		// Process each controlled token, as well as the reference token
-        for (let t of canvas.tokens.controlled) {
-			let animate = animationDuration != 0;
-			if (!t._animation || !animate) {
-				await t.document.update({"texture.scaleX": t.document.texture.scaleX * -1}, {animate: animate, animation: {duration: animationDuration}});
-			}
-		}
-    }
-    
-	/**
-	 * Create the HTML elements for the HUD button
-	 * including the Font Awesome icon and tooltop.
-	 * 
-	 * @return {Element} The `<div>` element that is used as the HUD button.
-	 */
-	static createButton() {
-		let button = document.createElement("div");
-
-		button.classList.add("control-icon");
-		button.innerHTML = `<i class="fab fa-flipboard fa-fw"></i>`
-		button.title = game.i18n.localize("TKNMRB.TooltipText");
-		return button;
-    }
-    
-	/**
-	 * Adds the button to the Token HUD,
-	 * and attaches event listeners.
-	 *
-	 * @param {TokenHUD} hud - The HUD object, not used.
-	 * @param {jQuery} html - The jQuery reference to the HUD HTML.
-	 */
-	static prepTokenHUD(hud, html) {
-		const mirrorButton = this.createButton();
-
-		$(mirrorButton)
-			.click((event) =>
-				this.buttonEventHandler(event)
-			)
-			.contextmenu((event) =>
-				this.buttonEventHandler(event)
-			);
-
-		html.find("div.left").append(mirrorButton);
-    }
-}
-
+// Inject the mirror button when it is rendered
 Hooks.on("renderTokenHUD", (...args) => MirrorButton.prepTokenHUD(...args));
