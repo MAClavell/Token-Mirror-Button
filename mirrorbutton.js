@@ -19,7 +19,8 @@ class MirrorButton {
 			let animate = TMB_animationDuration != 0;
 			if (!t.animationContexts.size || !animate) {
 				let updates = {};
-				updates[property] = foundry.utils.getProperty(t.document, property) * -1;
+				let newScale = foundry.utils.getProperty(t.document._source, property) * -1;
+				updates[property] = newScale;
 				await t.document.update(updates, { animate: animate, animation: { duration: TMB_animationDuration } });
 			}
 		}
